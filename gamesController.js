@@ -1,11 +1,21 @@
-const { fetchCategories } = require("./gamesModel");
+const { fetchCategories, fetchReviews } = require("./gamesModel");
 
 exports.getCategories = (req, res, next) => {
 	fetchCategories()
 		.then((categories) => {
 			res.status(200).send(categories);
 		})
-		.catch(next);
+		.catch((err) => {
+			next(err);
+		});
 };
 
-exports.getReviews = (req, res, next) => {};
+exports.getReviews = (req, res, next) => {
+	fetchReviews()
+		.then((reviews) => {
+			res.status(200).send(reviews);
+		})
+		.catch((err) => {
+			next(err);
+		});
+};
