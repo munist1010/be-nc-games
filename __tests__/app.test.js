@@ -45,9 +45,7 @@ describe("app", () => {
 				.get("/api/reviews")
 				.expect(200)
 				.then((response) => {
-					// const { body } = response;
 					const reviews = response.body;
-					console.log(reviews);
 					reviews.forEach((review) => {
 						expect(review).toMatchObject({
 							owner: expect.any(String),

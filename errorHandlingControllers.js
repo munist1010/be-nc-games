@@ -2,7 +2,6 @@ exports.handlePsqlErrors = (err, req, res, next) => {
 	if (err.code === "22P02") {
 		res.status(400).send({ msg: "Invalid input" });
 	} else if (err.code === "42P01") {
-		console.log("error");
 		res.status(404).send({ msg: "Path Not Found" });
 	} else {
 		next(err);
