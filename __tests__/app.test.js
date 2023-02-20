@@ -10,10 +10,22 @@ describe("app", () => {
 			return request(app)
 				.get("/api/categories")
 				.expect(200)
-				.then(({ body }) => {
+				.then((response) => {
+					const { body } = response;
 					const categories = body;
-					console.log(categories);
 					expect(Array.isArray(categories)).toBe(true);
+					expect(categories[0]).toMatchObject({
+						slug: expect.any(String),
+						description: expect.any(String),
+					});
+				});
+		});
+		it("should respond with a 404 Not Found error if passed a route that does not exist", () => {
+			return request(app)
+				.get("/api/notARoute")
+				.expect(404)
+				.then((response) => {
+					expect(response.notFound).toBe(true);
 				});
 		});
 	});
