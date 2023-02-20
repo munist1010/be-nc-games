@@ -1,5 +1,5 @@
 const express = require("express");
-const { getCategories } = require("./gamesController");
+const { getCategories, getReviews } = require("./gamesController");
 const {
 	handleCustomErrors,
 	handlePsqlErrors,
@@ -7,13 +7,14 @@ const {
 } = require("./errorHandlingControllers");
 
 const app = express();
-app.use(express.json());
 
 app.get("/api/", (req, res) => {
-	res.status(200).send({ msg: "all good!" }).catch(next);
+	res.status(200).send({ msg: "all good!" });
 });
 
 app.get("/api/categories", getCategories);
+
+app.get("/api/reviews", getReviews);
 
 app.use(handlePsqlErrors);
 app.use(handleCustomErrors);
