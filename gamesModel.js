@@ -5,3 +5,22 @@ exports.fetchCategories = () => {
 		return result.rows;
 	});
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+exports.fetchReviewByID = (review_id) => {
+    return db.query(`SELECT * FROM reviews WHERE review_id = %L`, review_id)
+}
