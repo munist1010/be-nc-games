@@ -14,9 +14,11 @@ describe("app", () => {
 					const { body } = response;
 					const categories = body;
 					expect(Array.isArray(categories)).toBe(true);
-					expect(categories[0]).toMatchObject({
-						slug: expect.any(String),
-						description: expect.any(String),
+					categories.forEach((category) => {
+						expect(category).toMatchObject({
+							slug: expect.any(String),
+							description: expect.any(String),
+						});
 					});
 				});
 		});
