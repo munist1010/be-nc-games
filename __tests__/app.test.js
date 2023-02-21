@@ -195,9 +195,10 @@ describe("app", () => {
 			};
 			return request(app)
 				.post("/api/reviews/1000/comments")
+				.send(newComment)
 				.expect(400)
 				.then(({ body }) => {
-					expect(body.msg).toBe("invalid data entry");
+					expect(body.msg).toBe("Bad user request; no info found");
 				});
 		});
 		it("400 - BAD REQUEST: should return an error when trying to POST comments to an id which is not a number", () => {
@@ -207,6 +208,20 @@ describe("app", () => {
 			};
 			return request(app)
 				.get("/api/reviews/banana/comments")
+				.send(newComment)
+				.expect(400)
+				.then(({ body }) => {
+					expect(body.msg).toBe("Invalid input");
+				});
+		});
+		it("400 - BAD REQUEST: should return an error when trying to POST comments with a username not in the database", () => {
+			const newComment = {
+				username: "munist1010",
+				body: "this is a test comment",
+			};
+			return request(app)
+				.get("/api/reviews/banana/comments")
+				.send(newComment)
 				.expect(400)
 				.then(({ body }) => {
 					expect(body.msg).toBe("Invalid input");
