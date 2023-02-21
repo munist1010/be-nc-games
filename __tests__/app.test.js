@@ -118,23 +118,39 @@ describe("app", () => {
 		});
 	});
 	describe("/api/reviews/:review_id/comments", () => {
-		it("should return an array for comments for a specific review_id", () => {
+		it("200 - GET: should return an array of comments for a specific review_id", () => {
 			return request(app)
-				.get("/api/reviews/1/comments")
+				.get("/api/reviews/3/comments")
 				.expect(200)
 				.then((response) => {
 					expect(Array.isArray(response.body)).toBe(true);
 				});
 		});
-		it("should return the array of comments sorted by date", () => {
+		it("200 - GET: should return the array of comments sorted by date", () => {
 			return request(app)
-				.get("/api/reviews/4/comments")
+				.get("/api/reviews/3/comments")
 				.expect(200)
 				.then((response) => {
 					expect(response.body).toBeSorted({
 						key: "created_at",
 						descending: "true",
 					});
+				});
+		});
+		it("404 - NOT FOUND: should return an error when trying to find comments for a review_id that does not exist", () => {
+			return request(app)
+				.get("/api/reviews/1000/comments")
+				.expect(404)
+				.then(({ body }) => {
+					expect(body.msg).toBe("review_id not found");
+				});
+		});
+		it("400 - BAD REQUEST: should return an error when trying to GET comments of an id which is not a number", () => {
+			return request(app)
+				.get("/api/reviews/banana/comments")
+				.expect(400)
+				.then(({ body }) => {
+					expect(body.msg).toBe("Invalid input");
 				});
 		});
 	});
