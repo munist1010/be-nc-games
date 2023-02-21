@@ -16,12 +16,28 @@ exports.fetchReviews = () => {
 		});
 };
 
+exports.fetchReviewByID = (review_id) => {
+	if (typeof parseInt(review_id) !== "number") {
+		return Promise.reject("invalid review_id type");
+	}
+	const queryString = format(
+		`SELECT * FROM reviews WHERE review_id = %L;`,
+		review_id,
+	);
+	return db.query(queryString).then((result) => {
+		if (result.rowCount === 0) {
+			return Promise.reject("review_id not found");
+		}
+		return result.rows[0];
+	});
+};
+
 exports.fetchCommentsByReviewID = (review_id) => {
 	const queryString = format(
 		`SELECT comment_id, votes, created_at, author, body, review_id FROM comments WHERE review_id = %L`,
 		review_id,
 	);
 	return db.query(queryString).then((result) => {
-		return result.rows
+		return result.rows;
 	});
 };

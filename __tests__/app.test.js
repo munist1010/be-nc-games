@@ -14,7 +14,7 @@ afterAll(() => {
 
 describe("app", () => {
 	describe("/api/categories", () => {
-		it("should respond with an array of categories", () => {
+		it("200 - GET: should respond with an array of categories", () => {
 			return request(app)
 				.get("/api/categories")
 				.expect(200)
@@ -30,7 +30,7 @@ describe("app", () => {
 					});
 				});
 		});
-		it("should respond with a 404 Not Found error if passed a route that does not exist", () => {
+		it("404 - NOT FOUND: should respond with a 404 Not Found error if passed a route that does not exist", () => {
 			return request(app)
 				.get("/api/notARoute")
 				.expect(404)
@@ -40,7 +40,7 @@ describe("app", () => {
 		});
 	});
 	describe("/api/reviews", () => {
-		it("should return an array of reviews", () => {
+		it("200 - GET: should return an array of reviews", () => {
 			return request(app)
 				.get("/api/reviews")
 				.expect(200)
@@ -61,7 +61,7 @@ describe("app", () => {
 					});
 				});
 		});
-		it("should return an error 404 if path does not exist", () => {
+		it("404 - NOT FOUND: should return an error 404 if path does not exist", () => {
 			return request(app)
 				.get("/api/review")
 				.expect(404)
@@ -69,7 +69,7 @@ describe("app", () => {
 					expect(response.notFound).toBe(true);
 				});
 		});
-		it("should return the array of reviews in descending date order", () => {
+		it("200 - GET: should return the array of reviews in descending date order", () => {
 			return request(app)
 				.get("/api/reviews")
 				.expect(200)
@@ -78,6 +78,42 @@ describe("app", () => {
 						key: "created_at",
 						descending: "true",
 					});
+				});
+		});
+	});
+	describe("/api/review/:review_id", () => {
+		it("200 - GET: should return a single review by id", () => {
+			return request(app)
+				.get("/api/reviews/1")
+				.expect(200)
+				.then((response) => {
+					expect(response.body).toMatchObject({
+						review_id: expect.any(Number),
+						title: expect.any(String),
+						category: expect.any(String),
+						designer: expect.any(String),
+						owner: expect.any(String),
+						review_body: expect.any(String),
+						review_img_url: expect.any(String),
+						created_at: expect.any(String),
+						votes: expect.any(Number),
+					});
+				});
+		});
+		it("404 - NOT FOUND: should return an error when trying to GET an id which does not exist", () => {
+			return request(app)
+				.get("/api/reviews/1000")
+				.expect(404)
+				.then(({ body }) => {
+					expect(body.msg).toBe("review_id not found");
+				});
+		});
+		it("400 - BAD REQUEST: should return an error when trying to GET an id which is not a number", () => {
+			return request(app)
+				.get("/api/reviews/banana")
+				.expect(400)
+				.then(({ body }) => {
+					expect(body.msg).toBe("Invalid input");
 				});
 		});
 	});
