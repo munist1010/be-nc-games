@@ -2,6 +2,7 @@ const {
 	fetchCategories,
 	fetchReviews,
 	fetchReviewByID,
+	insertCommentByReviewID,
 } = require("./gamesModel");
 
 exports.getCategories = (req, res, next) => {
@@ -26,10 +27,23 @@ exports.getReviews = (req, res, next) => {
 
 exports.getReviewByID = (req, res, next) => {
 	const { review_id } = req.params;
-	fetchReviewByID(review_id).then((review) => {
-		res.status(200).send(review);
-	})
-	.catch((err) => {
-		next(err)
-	});
+	fetchReviewByID(review_id)
+		.then((review) => {
+			res.status(200).send(review);
+		})
+		.catch((err) => {
+			next(err);
+		});
+};
+
+exports.postCommentByReviewID = (req, res, next) => {
+	const { review_id } = req.params;
+	const comment = req.body;
+	insertCommentByReviewID(comment, review_id)
+		.then((newComment) => {
+			res.status(201).send(newComment);
+		})
+		.catch((err) => {
+			next(err);
+		});
 };

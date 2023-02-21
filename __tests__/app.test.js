@@ -117,4 +117,19 @@ describe("app", () => {
 				});
 		});
 	});
+	// describe("/api/reviews/:review_id/comments", () => {
+	// 	it("201 - POST: should insert a comment at the specified review_id", () => {
+	// 		const newComment = {
+	// 			username: "munist1010",
+	// 			body: "this is a test comment",
+	// 		};
+	// 		return request(app)
+	// 			.post("/api/reviews/777/comments")
+	// 			.send(newComment)
+	// 			.expect(201)
+	// 			.then((res) => {
+	// 				expect(res.body).toEqual({ ...newComment, review_id: 777 });
+	// 			});
+	// });
+	// });
 });
