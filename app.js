@@ -2,6 +2,7 @@ const express = require("express");
 const {
 	getCategories,
 	getReviews,
+	getCommentsByReviewID,
 	getReviewByID,
 	postCommentByReviewID,
 } = require("./gamesController");
@@ -24,6 +25,8 @@ app.get("/api/categories", getCategories);
 app.get("/api/reviews", getReviews);
 
 app.get("/api/reviews/:review_id", getReviewByID);
+
+app.get("/api/reviews/:review_id/comments", getCommentsByReviewID);
 
 app.post("/api/reviews/:review_id/comments", postCommentByReviewID);
 
