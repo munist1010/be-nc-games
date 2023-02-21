@@ -166,11 +166,11 @@ describe("app", () => {
 				.expect(201)
 				.then((res) => {
 					expect(res.body).toMatchObject({
-						author: expect.any(String),
-						body: expect.any(String),
+						author: "mallionaire",
+						body: "this is a test comment",
 						created_at: expect.any(String),
-						comment_id: expect.any(Number),
-						votes: expect.any(Number),
+						comment_id: 7,
+						votes: 0,
 						review_id: 3,
 					});
 				});
@@ -195,9 +195,10 @@ describe("app", () => {
 			};
 			return request(app)
 				.post("/api/reviews/1000/comments")
+				.send(newComment)
 				.expect(400)
 				.then(({ body }) => {
-					expect(body.msg).toBe("invalid data entry");
+					expect(body.msg).toBe("user info not found");
 				});
 		});
 		it("400 - BAD REQUEST: should return an error when trying to POST comments to an id which is not a number", () => {
@@ -207,9 +208,23 @@ describe("app", () => {
 			};
 			return request(app)
 				.get("/api/reviews/banana/comments")
+				.send(newComment)
 				.expect(400)
 				.then(({ body }) => {
 					expect(body.msg).toBe("Invalid input");
+				});
+		});
+		it("400 - BAD REQUEST: should return an error when trying to POST comments to a username which is not in the database", () => {
+			const newComment = {
+				username: "munist1010",
+				body: "this is a test comment",
+			};
+			return request(app)
+				.post("/api/reviews/3/comments")
+				.send(newComment)
+				.expect(400)
+				.then(({ body }) => {
+					expect(body.msg).toBe("user info not found");
 				});
 		});
 	});

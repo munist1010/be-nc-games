@@ -4,6 +4,7 @@ const {
 	fetchCommentsByReviewID,
 	fetchReviewByID,
 	insertCommentByReviewID,
+	editReviewByVote,
 } = require("./gamesModel");
 
 exports.getCategories = (req, res, next) => {
@@ -58,3 +59,4 @@ exports.postCommentByReviewID = (req, res, next) => {
 			next(err);
 		});
 };
+

@@ -5,6 +5,7 @@ const {
 	getCommentsByReviewID,
 	getReviewByID,
 	postCommentByReviewID,
+	patchReview,
 } = require("./gamesController");
 const {
 	handleCustomErrors,
