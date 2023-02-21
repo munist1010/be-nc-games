@@ -50,9 +50,11 @@ exports.fetchCommentsByReviewID = (review_id) => {
 
 exports.insertCommentByReviewID = (comment, review_id) => {
 	const { username, body } = comment;
-	console.log(comment);
+	if (!username || !body) {
+		return Promise.reject("invalid data entry");
+	}
 	const queryString = format(
-		`INSERT INTO comments (author, body, review_id) VALUES %L RETURNING *;`,
+		`INSERT INTO comments (author, body, review_id) VALUES (%L) RETURNING *;`,
 		[username, body, review_id],
 	);
 	return db.query(queryString).then((result) => {

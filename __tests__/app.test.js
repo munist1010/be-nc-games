@@ -154,19 +154,63 @@ describe("app", () => {
 				});
 		});
 	});
-	// describe("/api/reviews/:review_id/comments", () => {
-	// 	it("201 - POST: should insert a comment at the specified review_id", () => {
-	// 		const newComment = {
-	// 			username: "munist1010",
-	// 			body: "this is a test comment",
-	// 		};
-	// 		return request(app)
-	// 			.post("/api/reviews/777/comments")
-	// 			.send(newComment)
-	// 			.expect(201)
-	// 			.then((res) => {
-	// 				expect(res.body).toEqual({ ...newComment, review_id: 777 });
-	// 			});
-	// 	});
-	// });
+	describe("/api/reviews/:review_id/comments", () => {
+		it("201 - POST: should insert a comment at the specified review_id", () => {
+			const newComment = {
+				username: "mallionaire",
+				body: "this is a test comment",
+			};
+			return request(app)
+				.post("/api/reviews/3/comments")
+				.send(newComment)
+				.expect(201)
+				.then((res) => {
+					expect(res.body).toMatchObject({
+						author: expect.any(String),
+						body: expect.any(String),
+						created_at: expect.any(String),
+						comment_id: expect.any(Number),
+						votes: expect.any(Number),
+						review_id: 3,
+					});
+				});
+		});
+		it("400 - Invalid Input: should return an error if an empty request object is sent", () => {
+			const newComment = {
+				username: "",
+				body: "",
+			};
+			return request(app)
+				.post("/api/reviews/3/comments")
+				.send(newComment)
+				.expect(400)
+				.then((res) => {
+					expect(res.body.msg).toBe("invalid data entry");
+				});
+		});
+		it("404 - NOT FOUND: should return an error when trying to post comments to a review_id that does not exist", () => {
+			const newComment = {
+				username: "mallionaire",
+				body: "this is a test comment",
+			};
+			return request(app)
+				.post("/api/reviews/1000/comments")
+				.expect(400)
+				.then(({ body }) => {
+					expect(body.msg).toBe("invalid data entry");
+				});
+		});
+		it("400 - BAD REQUEST: should return an error when trying to POST comments to an id which is not a number", () => {
+			const newComment = {
+				username: "mallionaire",
+				body: "this is a test comment",
+			};
+			return request(app)
+				.get("/api/reviews/banana/comments")
+				.expect(400)
+				.then(({ body }) => {
+					expect(body.msg).toBe("Invalid input");
+				});
+		});
+	});
 });
