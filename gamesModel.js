@@ -1,4 +1,5 @@
 const db = require("./db/connection");
+const format = require("pg-format");
 
 exports.fetchCategories = () => {
 	return db.query(`SELECT * FROM categories;`).then((result) => {
@@ -14,4 +15,20 @@ exports.fetchReviews = () => {
 		.then((result) => {
 			return result.rows;
 		});
+};
+
+exports.fetchReviewByID = (review_id) => {
+	if (typeof parseInt(review_id) !== "number") {
+		return Promise.reject("invalid review_id type");
+	}
+	const queryString = format(
+		`SELECT * FROM reviews WHERE review_id = %L;`,
+		review_id,
+	);
+	return db.query(queryString).then((result) => {
+		if (result.rowCount === 0) {
+			return Promise.reject("review_id not found");
+		}
+		return result.rows[0];
+	});
 };
