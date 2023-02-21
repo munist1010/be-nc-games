@@ -1,5 +1,5 @@
 const db = require("./db/connection");
-
+const format = require("pg-format");
 exports.fetchCategories = () => {
 	return db.query(`SELECT * FROM categories;`).then((result) => {
 		return result.rows;
@@ -14,4 +14,14 @@ exports.fetchReviews = () => {
 		.then((result) => {
 			return result.rows;
 		});
+};
+
+exports.fetchCommentsByReviewID = (review_id) => {
+	const queryString = format(
+		`SELECT comment_id, votes, created_at, author, body, review_id FROM comments WHERE review_id = %L`,
+		review_id,
+	);
+	return db.query(queryString).then((result) => {
+		return result.rows
+	});
 };

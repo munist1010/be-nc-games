@@ -81,4 +81,25 @@ describe("app", () => {
 				});
 		});
 	});
+	describe("/api/reviews/:review_id/comments", () => {
+		it("should return an array for comments for a specific review_id", () => {
+			return request(app)
+				.get("/api/reviews/1/comments")
+				.expect(200)
+				.then((response) => {
+					expect(Array.isArray(response.body)).toBe(true);
+				});
+		});
+		it("should return the array of comments sorted by date", () => {
+			return request(app)
+				.get("/api/reviews/4/comments")
+				.expect(200)
+				.then((response) => {
+					expect(response.body).toBeSorted({
+						key: "created_at",
+						descending: "true",
+					});
+				});
+		});
+	});
 });

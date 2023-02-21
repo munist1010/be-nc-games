@@ -1,5 +1,9 @@
 const express = require("express");
-const { getCategories, getReviews } = require("./gamesController");
+const {
+	getCategories,
+	getReviews,
+	getCommentsByReviewID,
+} = require("./gamesController");
 const {
 	handleCustomErrors,
 	handlePsqlErrors,
@@ -15,6 +19,8 @@ app.get("/api/", (req, res) => {
 app.get("/api/categories", getCategories);
 
 app.get("/api/reviews", getReviews);
+
+app.get("/api/reviews/:review_id/comments", getCommentsByReviewID);
 
 app.use(handlePsqlErrors);
 app.use(handleCustomErrors);
