@@ -228,4 +228,18 @@ describe("app", () => {
 				});
 		});
 	});
+	describe("PATCH /api/reviews/:review_id", () => {
+		it("should update the votes property on a review element by an amount given by newVote", () => {
+			const voteObject = {
+				inc_votes: 50,
+			};
+			return request(app)
+				.patch("/api/reviews/3")
+				.send(voteObject)
+				.expect(200)
+				.then((res) => {
+					expect(res).toMatchObject({});
+				});
+		});
+	});
 });

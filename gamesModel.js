@@ -61,3 +61,15 @@ exports.insertCommentByReviewID = (comment, review_id) => {
 		return result.rows[0];
 	});
 };
+exports.editReviewWithVote = (votes, review_id) => {
+	const { inc_votes } = votes;
+	const queryString = format(
+		`UPDATE reviews SET votes = votes + %L WHERE review_id = %L;`,
+		inc_votes,
+		review_id,
+	);
+	return db.query(queryString).then((result) => {
+		console.log(result);
+		return result.rows[0];
+	});
+};

@@ -5,6 +5,7 @@ const {
 	getCommentsByReviewID,
 	getReviewByID,
 	postCommentByReviewID,
+	patchReview,
 } = require("./gamesController");
 const {
 	handleCustomErrors,
@@ -29,6 +30,8 @@ app.get("/api/reviews/:review_id", getReviewByID);
 app.get("/api/reviews/:review_id/comments", getCommentsByReviewID);
 
 app.post("/api/reviews/:review_id/comments", postCommentByReviewID);
+
+app.patch("/api/reviews/:review_id", patchReview);
 
 app.use(handlePsqlErrors);
 app.use(handleCustomErrors);
