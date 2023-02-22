@@ -33,6 +33,12 @@ app.post("/api/reviews/:review_id/comments", postCommentByReviewID);
 
 app.patch("/api/reviews/:review_id", patchReview);
 
+app.all("/*", (req, res, next) => {
+	// console.log("app.all", req.method, req.url);
+	res.status(404).send({ msg: "404 from app.all" });
+	next();
+});
+
 app.use(handlePsqlErrors);
 app.use(handleCustomErrors);
 app.use(handleServerErrors);

@@ -63,13 +63,18 @@ exports.insertCommentByReviewID = (comment, review_id) => {
 };
 exports.editReviewWithVote = (votes, review_id) => {
 	const { inc_votes } = votes;
+	if (!inc_votes) {
+		return Promise.reject("Not a valid key on object");
+	}
 	const queryString = format(
-		`UPDATE reviews SET votes = votes + %L WHERE review_id = %L;`,
+		`UPDATE reviews SET votes = votes + %L WHERE review_id = %L RETURNING *;`,
 		inc_votes,
 		review_id,
 	);
 	return db.query(queryString).then((result) => {
-		console.log(result);
+		if (result.rows.length === 0) {
+			return Promise.reject("no valid review_id");
+		}
 		return result.rows[0];
 	});
 };

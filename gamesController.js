@@ -5,6 +5,7 @@ const {
 	fetchReviewByID,
 	insertCommentByReviewID,
 	editReviewWithVote,
+	doesReviewIDExist,
 } = require("./gamesModel");
 
 exports.getCategories = (req, res, next) => {
