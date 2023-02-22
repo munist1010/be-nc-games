@@ -228,4 +228,22 @@ describe("app", () => {
 				});
 		});
 	});
+	describe("/api/users", () => {
+		it("should return an array of user objects", () => {
+			return request(app)
+				.get("/api/users")
+				.expect(200)
+				.then((response) => {
+					const { body } = response;
+					expect(Array.isArray(body)).toBe(true);
+					body.forEach((body) => {
+						expect(body).toMatchObject({
+							username: expect.any(String),
+							name: expect.any(String),
+							avatar_url: expect.any(String),
+						});
+					});
+				});
+		});
+	});
 });
