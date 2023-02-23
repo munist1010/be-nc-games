@@ -8,8 +8,17 @@ const {
 	doesReviewIDExist,
 	fetchUsers,
 	removeCommentByID,
+	readEndpoints,
 } = require("./gamesModel");
-
+exports.getAPI = (req, res, next) => {
+	readEndpoints()
+		.then((endpoints) => {
+			res.status(200).send(endpoints);
+		})
+		.catch((err) => {
+			next(err);
+		});
+};
 exports.getCategories = (req, res, next) => {
 	fetchCategories()
 		.then((categories) => {
@@ -87,7 +96,6 @@ exports.getUsers = (req, res, next) => {
 };
 
 exports.deleteCommentByID = (req, res, next) => {
-	console.log(req.params);
 	const { comment_id } = req.params;
 	removeCommentByID(comment_id)
 		.then(() => {

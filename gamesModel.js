@@ -1,5 +1,12 @@
 const db = require("./db/connection");
 const format = require("pg-format");
+const fs = require("fs/promises");
+exports.readEndpoints = () => {
+	return fs.readFile("./endpoints.json", "utf-8").then((result) => {
+		const file = JSON.parse(result);
+		return file;
+	});
+};
 exports.fetchCategories = () => {
 	return db.query(`SELECT * FROM categories;`).then((result) => {
 		return result.rows;
@@ -95,11 +102,9 @@ exports.fetchUsers = () => {
 };
 
 exports.removeCommentByID = (comment_id) => {
-	console.log(comment_id);
 	const queryString = format(
 		`DELETE FROM comments WHERE comment_id = %L;`,
 		comment_id,
 	);
-	console.log(queryString);
 	return db.query(queryString);
 };

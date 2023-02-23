@@ -8,6 +8,7 @@ const {
 	patchReview,
 	getUsers,
 	deleteCommentByID,
+	getAPI,
 } = require("./gamesController");
 const {
 	handleCustomErrors,
@@ -19,9 +20,7 @@ const app = express();
 
 app.use(express.json());
 
-app.get("/api/", (req, res) => {
-	res.status(200).send({ msg: "all good!" });
-});
+app.get("/api", getAPI);
 
 app.get("/api/categories", getCategories);
 
