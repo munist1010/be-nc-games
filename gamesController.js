@@ -7,6 +7,7 @@ const {
 	editReviewWithVote,
 	doesReviewIDExist,
 	fetchUsers,
+	removeCommentByID,
 } = require("./gamesModel");
 
 exports.getCategories = (req, res, next) => {
@@ -79,6 +80,18 @@ exports.getUsers = (req, res, next) => {
 	fetchUsers()
 		.then((users) => {
 			res.status(200).send(users);
+		})
+		.catch((err) => {
+			next(err);
+		});
+};
+
+exports.deleteCommentByID = (req, res, next) => {
+	console.log(req.params);
+	const { comment_id } = req.params;
+	removeCommentByID(comment_id)
+		.then(() => {
+			res.status(204).send();
 		})
 		.catch((err) => {
 			next(err);

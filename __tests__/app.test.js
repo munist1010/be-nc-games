@@ -122,7 +122,6 @@ describe("app", () => {
 				.get("/api/reviews/1")
 				.expect(200)
 				.then((response) => {
-					console.log(response.body);
 					expect(response.body).toMatchObject({
 						review_id: expect.any(Number),
 						title: expect.any(String),
@@ -141,7 +140,6 @@ describe("app", () => {
 				.get("/api/reviews/3")
 				.expect(200)
 				.then((response) => {
-					console.log(response.body);
 					expect(response.body).toMatchObject({
 						comment_count: "3",
 					});
@@ -341,6 +339,11 @@ describe("app", () => {
 						});
 					});
 				});
+		});
+	});
+	describe("/api/comments/comment_id", () => {
+		it("should delete a comment by comment_id", () => {
+			return request(app).delete("/api/comments/1").expect(204);
 		});
 	});
 });

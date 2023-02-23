@@ -6,7 +6,6 @@ exports.fetchCategories = () => {
 	});
 };
 
-
 exports.fetchReviews = (category, sort_by, order) => {
 	let queryString = format(
 		`SELECT owner, title, reviews.review_id, category, review_img_url, reviews.created_at, reviews.votes, designer, COUNT(reviews.review_id) AS comment_count FROM reviews LEFT JOIN comments ON reviews.review_id = comments.review_id`,
@@ -93,4 +92,14 @@ exports.fetchUsers = () => {
 	return db.query(`SELECT * FROM users;`).then((result) => {
 		return result.rows;
 	});
+};
+
+exports.removeCommentByID = (comment_id) => {
+	console.log(comment_id);
+	const queryString = format(
+		`DELETE FROM comments WHERE comment_id = %L;`,
+		comment_id,
+	);
+	console.log(queryString);
+	return db.query(queryString);
 };
