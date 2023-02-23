@@ -4,6 +4,8 @@ const {
 	fetchCommentsByReviewID,
 	fetchReviewByID,
 	insertCommentByReviewID,
+	editReviewWithVote,
+	doesReviewIDExist,
 	fetchUsers,
 } = require("./gamesModel");
 
@@ -59,7 +61,17 @@ exports.postCommentByReviewID = (req, res, next) => {
 			next(err);
 		});
 };
-
+exports.patchReview = (req, res, next) => {
+	const { review_id } = req.params;
+	const votes = req.body;
+	editReviewWithVote(votes, review_id)
+		.then((newReview) => {
+			res.status(200).send(newReview);
+		})
+		.catch((err) => {
+			next(err);
+		});
+};
 exports.getUsers = (req, res, next) => {
 	fetchUsers()
 		.then((users) => {

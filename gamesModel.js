@@ -61,7 +61,26 @@ exports.insertCommentByReviewID = (comment, review_id) => {
 		return result.rows[0];
 	});
 };
-
+exports.editReviewWithVote = (votes, review_id) => {
+	const { inc_votes } = votes;
+	if (!inc_votes) {
+		return Promise.reject("Not a valid key on object");
+	}
+	if (typeof inc_votes === "string") {
+		return Promise.reject("Not a valid value on object");
+	}
+	const queryString = format(
+		`UPDATE reviews SET votes = votes + %L WHERE review_id = %L RETURNING *;`,
+		inc_votes,
+		review_id,
+	);
+	return db.query(queryString).then((result) => {
+		if (result.rows.length === 0) {
+			return Promise.reject("no valid review_id");
+		}
+		return result.rows[0];
+	});
+};
 exports.fetchUsers = () => {
 	return db.query(`SELECT * FROM users;`).then((result) => {
 		return result.rows;

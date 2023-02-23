@@ -228,6 +228,56 @@ describe("app", () => {
 				});
 		});
 	});
+	describe("PATCH /api/reviews/:review_id", () => {
+		it("200 - should update the votes property on a review element by an amount given by newVote", () => {
+			const voteObject = {
+				inc_votes: 50,
+			};
+			return request(app)
+				.patch("/api/reviews/3")
+				.send(voteObject)
+				.expect(200)
+				.then((res) => {
+					expect(res).toMatchObject({});
+				});
+		});
+		it("404 - NOT FOUND: should return an error if trying to patch to a review_id that does not exist", () => {
+			const voteObject = {
+				inc_votes: 50,
+			};
+			return request(app)
+				.patch("/api/reviews/490")
+				.send(voteObject)
+				.expect(404)
+				.then((res) => {
+					expect(res.body.msg).toBe("review_id not found");
+				});
+		});
+		it("400 - BAD REQUEST: should return an error if sent the wrong type of key in the request", () => {
+			const voteObject = {
+				bad_key: 50,
+			};
+			return request(app)
+				.patch("/api/reviews/3")
+				.send(voteObject)
+				.expect(400)
+				.then((res) => {
+					expect(res.body.msg).toBe("Not a valid key on object");
+				});
+		});
+		it("400 - INVALID REQUEST: should return an error if sent the wrong type of value in the request", () => {
+			const voteObject = {
+				inc_votes: "a string",
+			};
+			return request(app)
+				.patch("/api/reviews/3")
+				.send(voteObject)
+				.expect(400)
+				.then((res) => {
+					expect(res.body.msg).toBe("Not a valid value on object");
+				});
+		});
+	});
 	describe("/api/users", () => {
 		it("should return an array of user objects", () => {
 			return request(app)

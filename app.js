@@ -5,6 +5,7 @@ const {
 	getCommentsByReviewID,
 	getReviewByID,
 	postCommentByReviewID,
+	patchReview,
 	getUsers,
 } = require("./gamesController");
 const {
@@ -31,7 +32,15 @@ app.get("/api/reviews/:review_id/comments", getCommentsByReviewID);
 
 app.post("/api/reviews/:review_id/comments", postCommentByReviewID);
 
+app.patch("/api/reviews/:review_id", patchReview);
+
 app.get("/api/users", getUsers);
+
+app.all("/*", (req, res, next) => {
+	// console.log("app.all", req.method, req.url);
+	res.status(404).send({ msg: "404 from app.all" });
+	next();
+});
 
 app.use(handlePsqlErrors);
 app.use(handleCustomErrors);
