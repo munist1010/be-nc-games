@@ -24,5 +24,7 @@ exports.handleCustomErrors = (err, req, res, next) => {
 		res.status(404).send({ msg: "review_id not found" });
 	} else if (err === "Not a valid key on object") {
 		res.status(400).send({ msg: "Not a valid key on object" });
+	} else if (err === "Not a valid value on object") {
+		res.status(400).send({ msg: "Not a valid value on object" });
 	} else next(err);
 };

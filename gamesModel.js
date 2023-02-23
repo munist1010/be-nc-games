@@ -66,6 +66,9 @@ exports.editReviewWithVote = (votes, review_id) => {
 	if (!inc_votes) {
 		return Promise.reject("Not a valid key on object");
 	}
+	if (typeof inc_votes === "string") {
+		return Promise.reject("Not a valid value on object");
+	}
 	const queryString = format(
 		`UPDATE reviews SET votes = votes + %L WHERE review_id = %L RETURNING *;`,
 		inc_votes,
@@ -76,5 +79,10 @@ exports.editReviewWithVote = (votes, review_id) => {
 			return Promise.reject("no valid review_id");
 		}
 		return result.rows[0];
+	});
+};
+exports.fetchUsers = () => {
+	return db.query(`SELECT * FROM users;`).then((result) => {
+		return result.rows;
 	});
 };

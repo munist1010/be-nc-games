@@ -274,7 +274,25 @@ describe("app", () => {
 				.send(voteObject)
 				.expect(400)
 				.then((res) => {
-					expect(res.body.msg).toBe("Invalid input");
+					expect(res.body.msg).toBe("Not a valid value on object");
+				});
+		});
+	});
+	describe("/api/users", () => {
+		it("should return an array of user objects", () => {
+			return request(app)
+				.get("/api/users")
+				.expect(200)
+				.then((response) => {
+					const { body } = response;
+					expect(Array.isArray(body)).toBe(true);
+					body.forEach((body) => {
+						expect(body).toMatchObject({
+							username: expect.any(String),
+							name: expect.any(String),
+							avatar_url: expect.any(String),
+						});
+					});
 				});
 		});
 	});

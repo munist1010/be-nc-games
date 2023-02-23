@@ -6,6 +6,7 @@ const {
 	insertCommentByReviewID,
 	editReviewWithVote,
 	doesReviewIDExist,
+	fetchUsers,
 } = require("./gamesModel");
 
 exports.getCategories = (req, res, next) => {
@@ -66,6 +67,15 @@ exports.patchReview = (req, res, next) => {
 	editReviewWithVote(votes, review_id)
 		.then((newReview) => {
 			res.status(200).send(newReview);
+		})
+		.catch((err) => {
+			next(err);
+		});
+};
+exports.getUsers = (req, res, next) => {
+	fetchUsers()
+		.then((users) => {
+			res.status(200).send(users);
 		})
 		.catch((err) => {
 			next(err);
