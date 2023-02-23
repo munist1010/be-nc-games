@@ -61,6 +61,17 @@ describe("app", () => {
 					});
 				});
 		});
+		it("200 - GET: should return the array of reviews in descending date order", () => {
+			return request(app)
+				.get("/api/reviews")
+				.expect(200)
+				.then((response) => {
+					expect(response.body).toBeSorted({
+						key: "created_at",
+						descending: "true",
+					});
+				});
+		});
 		it("should return an array of reviews if given a category query", () => {
 			return request(app)
 				.get("/api/reviews?category='social deduction'")
@@ -74,31 +85,34 @@ describe("app", () => {
 					});
 				});
 		});
-		// it("should return an array of reviews if given a sort_by query, descending by default", () => {
-		// 	return request(app)
-		// 		.get("/api/reviews?sort_by=title")
-		// 		.expect(200)
-		// 		.then((response) => {
-		// 			expect(response.body).toBeSorted({ key: "owner", descending: true });
-		// 		});
-		// });
+		it("should return an array of reviews if given a sort_by query, descending by default", () => {
+			return request(app)
+				.get("/api/reviews?sort_by=owner")
+				.expect(200)
+				.then((response) => {
+					expect(response.body).toBeSorted({
+						key: "owner",
+						descending: "true",
+					});
+				});
+		});
+		it("should return an array of reviews if given a sort_by query, with order specified", () => {
+			return request(app)
+				.get("/api/reviews?sort_by=owner&&order=ASC")
+				.expect(200)
+				.then((response) => {
+					expect(response.body).toBeSorted({
+						key: "owner",
+						descending: false,
+					});
+				});
+		});
 		it("404 - NOT FOUND: should return an error 404 if path does not exist", () => {
 			return request(app)
 				.get("/api/review")
 				.expect(404)
 				.then((response) => {
 					expect(response.notFound).toBe(true);
-				});
-		});
-		it("200 - GET: should return the array of reviews in descending date order", () => {
-			return request(app)
-				.get("/api/reviews")
-				.expect(200)
-				.then((response) => {
-					expect(response.body).toBeSorted({
-						key: "created_at",
-						descending: "true",
-					});
 				});
 		});
 	});
