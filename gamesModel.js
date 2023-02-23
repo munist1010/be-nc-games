@@ -6,14 +6,21 @@ exports.fetchCategories = () => {
 	});
 };
 
-exports.fetchReviews = () => {
-	return db
-		.query(
-			`SELECT owner, title, reviews.review_id, category, review_img_url, reviews.created_at, reviews.votes, designer, COUNT(reviews.review_id) AS comment_count FROM reviews LEFT JOIN comments ON reviews.review_id = comments.review_id GROUP BY reviews.review_id ORDER BY created_at DESC;`,
-		)
-		.then((result) => {
-			return result.rows;
-		});
+exports.fetchReviews = (category, sort_by, order) => {
+	let queryString = format(
+		`SELECT owner, title, reviews.review_id, category, review_img_url, reviews.created_at, reviews.votes, designer, COUNT(reviews.review_id) AS comment_count FROM reviews LEFT JOIN comments ON reviews.review_id = comments.review_id`,
+	);
+	if (category) {
+		queryString += format(` WHERE category = %s`, category);
+	}
+	queryString += format(
+		` GROUP BY reviews.review_id ORDER BY %s %s;`,
+		sort_by,
+		order,
+	);
+	return db.query(queryString).then((result) => {
+		return result.rows;
+	});
 };
 
 exports.fetchReviewByID = (review_id) => {
