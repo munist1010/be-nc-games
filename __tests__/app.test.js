@@ -122,6 +122,7 @@ describe("app", () => {
 				.get("/api/reviews/1")
 				.expect(200)
 				.then((response) => {
+					console.log(response.body);
 					expect(response.body).toMatchObject({
 						review_id: expect.any(Number),
 						title: expect.any(String),
@@ -132,6 +133,17 @@ describe("app", () => {
 						review_img_url: expect.any(String),
 						created_at: expect.any(String),
 						votes: expect.any(Number),
+					});
+				});
+		});
+		it("200 - GET: should return the comment count of a single review by id", () => {
+			return request(app)
+				.get("/api/reviews/3")
+				.expect(200)
+				.then((response) => {
+					console.log(response.body);
+					expect(response.body).toMatchObject({
+						comment_count: "3",
 					});
 				});
 		});

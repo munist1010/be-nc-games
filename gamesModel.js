@@ -6,6 +6,7 @@ exports.fetchCategories = () => {
 	});
 };
 
+
 exports.fetchReviews = (category, sort_by, order) => {
 	let queryString = format(
 		`SELECT owner, title, reviews.review_id, category, review_img_url, reviews.created_at, reviews.votes, designer, COUNT(reviews.review_id) AS comment_count FROM reviews LEFT JOIN comments ON reviews.review_id = comments.review_id`,
@@ -28,7 +29,7 @@ exports.fetchReviewByID = (review_id) => {
 		return Promise.reject("invalid review_id type");
 	}
 	const queryString = format(
-		`SELECT * FROM reviews WHERE review_id = %L;`,
+		`SELECT reviews.*, COUNT(reviews.review_id) AS comment_count FROM reviews LEFT JOIN comments on reviews.review_id = comments.review_id WHERE reviews.review_id = %L GROUP BY reviews.review_id;`,
 		review_id,
 	);
 	return db.query(queryString).then((result) => {
