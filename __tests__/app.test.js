@@ -61,6 +61,27 @@ describe("app", () => {
 					});
 				});
 		});
+		it("should return an array of reviews if given a category query", () => {
+			return request(app)
+				.get("/api/reviews?category='social deduction'")
+				.expect(200)
+				.then((response) => {
+					const reviews = response.body;
+					reviews.forEach((review) => {
+						expect(review).toMatchObject({
+							category: "social deduction",
+						});
+					});
+				});
+		});
+		// it("should return an array of reviews if given a sort_by query, descending by default", () => {
+		// 	return request(app)
+		// 		.get("/api/reviews?sort_by=title")
+		// 		.expect(200)
+		// 		.then((response) => {
+		// 			expect(response.body).toBeSorted({ key: "owner", descending: true });
+		// 		});
+		// });
 		it("404 - NOT FOUND: should return an error 404 if path does not exist", () => {
 			return request(app)
 				.get("/api/review")
