@@ -253,7 +253,7 @@ describe("app", () => {
 					expect(res.body.msg).toBe("review_id not found");
 				});
 		});
-		it("400 - BAD REQUEST: should return an error if sent the wrong type of object in the request", () => {
+		it("400 - BAD REQUEST: should return an error if sent the wrong type of key in the request", () => {
 			const voteObject = {
 				bad_key: 50,
 			};
@@ -263,6 +263,18 @@ describe("app", () => {
 				.expect(400)
 				.then((res) => {
 					expect(res.body.msg).toBe("Not a valid key on object");
+				});
+		});
+		it("400 - INVALID REQUEST: should return an error if sent the wrong type of value in the request", () => {
+			const voteObject = {
+				inc_votes: "a string",
+			};
+			return request(app)
+				.patch("/api/reviews/3")
+				.send(voteObject)
+				.expect(400)
+				.then((res) => {
+					expect(res.body.msg).toBe("Invalid input");
 				});
 		});
 	});
