@@ -3,7 +3,7 @@ const ENV = process.env.NODE_ENV || "development";
 const config =
 	ENV === "production"
 		? {
-				connectionString: process.env.DATABASEURL,
+				connectionString: process.env.DATABASE_URL,
 				max: 2,
 		  }
 		: {};
